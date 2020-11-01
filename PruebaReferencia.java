@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Ppp {
+public class PruebaReferencia {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Referencia prueba = new Referencia();
@@ -10,12 +10,17 @@ public class Ppp {
             System.out.println(":::");
             prueba.obtenerMonto(sc);
             System.out.println("Monto condensado: "+ prueba.getMontoCondensado());
+            System.out.println(":::");
+            prueba.digitoVerificador(sc);
+            
         } catch (ExcepcionLongitud g) {
             System.out.println(g.getMessage());
         } catch (ExcepcionEnFecha fecha) {
             System.out.println(fecha.getMessage());
         } catch(ExcepcionMonto m){
             System.out.println(m.getMessage());
+        } catch(ExcepcionRFC b){
+            System.out.println(b.getMessage());
         }
 
         /*

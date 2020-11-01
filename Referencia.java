@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,11 +8,15 @@ public class Referencia {
 
     private String fechaCondenzada;
     private int montoCondensado;
+    private int digitoVerificador;
+    private String RFC;
 
+    static final String clave = "COL";
     static int anioEntero;
     static int mesEntero;
     static int diaEntero;
     static String montoAux;
+    static String RFCAux;
 
     public Referencia() {
 
@@ -222,6 +227,97 @@ public class Referencia {
         return this.montoCondensado;
     }
     // termina monto
+
+    // digito verificador 
+    public int digitoVerificador(Scanner sc) throws ExcepcionRFC {
+
+        // estado de control
+        boolean estadoDigito = false;
+
+        //bucle
+        do {
+            // try -  catch
+            try {
+                System.out.println("Ingrese su RFC sin homoclave, ejemplo: NAMS640111 ");
+                RFCAux = sc.nextLine();
+
+                // verificamos que sea la longitud correcta
+                if(RFCAux.length() > 10){
+                    throw new ExcepcionRFC("Exceso de caracteres ");
+                } else if(RFCAux.length() < 10){
+                    throw new ExcepcionRFC("Faltan caracteres ");
+                }
+
+                //verificamos que sea el formato correcto
+                String letraRFC = RFCAux.substring(0, 4);
+                String digitoRFC = RFCAux.substring(4, 10);
+
+                // clase pattern - matches para buscar coincidencias de A a Z
+                boolean esLetra = Pattern.matches("^[A-Z]*$", letraRFC);
+                if(esLetra = true){
+                    letraRFC = letraRFC;
+                } else {
+                    throw new ExcepcionRFC("Error en RFC ");
+                }
+                if(EsNumero.esNumero(digitoRFC)){
+                    digitoRFC = digitoRFC;
+                } else {
+                    throw new ExcepcionRFC("Error en RFC ");
+                }
+                // termina la verificacion
+
+                // transformar los string del RFC a int, concatenamos COL y la parte cadena del RFC
+                String parteLetra = clave + letraRFC;
+
+                // usamos ascii para obtener los valores
+                int[] valoresLetras = new int[parteLetra.length()];
+                for (int i = 0; i < valoresLetras.length; i++) {
+                    // variable que va a obtener las letras
+                    char caracterAux = parteLetra.charAt(i);
+                    // parseamos a ascii
+                    valoresLetras[i] = ((int) caracterAux -55);
+                }
+
+                // extraemos las partes ya convertidas a numeros del RFC
+                String primerP = String.valueOf(valoresLetras[0]);
+                String segundaP = String.valueOf(valoresLetras[1]);
+                String terceraP = String.valueOf(valoresLetras[2]);
+                String cuartaP = String.valueOf(valoresLetras[3]);
+                String quintaP = String.valueOf(valoresLetras[4]);
+                String sextaP = String.valueOf(valoresLetras[5]);
+                String septimaP = String.valueOf(valoresLetras[6]);
+
+                // fecha condensada, digitoRFCAUX y monto condensado a string
+                String digitoRFCAux = digitoRFC.toString();
+                String fechaCondensadaAux = this.fechaCondenzada;
+                String montoCondensadoAux = String.valueOf(this.montoCondensado);
+
+
+                System.out.println("--> " + fechaCondensadaAux + "> " + fechaCondensadaAux.length());
+                System.out.println("--> " + montoCondensadoAux + "> " + montoCondensadoAux.length());
+
+
+                /*Falta ver como extraer los digitos de 
+                digitoRFC
+                fechaC
+                montoC
+
+                posiblemente con un arrayList para generar la secuencia
+                */
+
+
+
+
+                estadoDigito = true;
+                
+            } catch (ExcepcionRFC e) {
+                System.out.println(e.getMessage() + "Intente de nuevo usando el formato correcto!");
+            }
+            
+        } while (estadoDigito == false);
+        return this.digitoVerificador;
+    }
+    // termina digito verificador
 
 
 
