@@ -228,45 +228,46 @@ public class Referencia {
     }
     // termina monto
 
-    // digito verificador 
+    // digito verificador
     public int digitoVerificador(Scanner sc) throws ExcepcionRFC {
 
         // estado de control
         boolean estadoDigito = false;
 
-        //bucle
+        // bucle
         do {
-            // try -  catch
+            // try - catch
             try {
                 System.out.println("Ingrese su RFC sin homoclave, ejemplo: NAMS640111 ");
                 RFCAux = sc.nextLine();
 
                 // verificamos que sea la longitud correcta
-                if(RFCAux.length() > 10){
+                if (RFCAux.length() > 10) {
                     throw new ExcepcionRFC("Exceso de caracteres ");
-                } else if(RFCAux.length() < 10){
+                } else if (RFCAux.length() < 10) {
                     throw new ExcepcionRFC("Faltan caracteres ");
                 }
 
-                //verificamos que sea el formato correcto
+                // verificamos que sea el formato correcto
                 String letraRFC = RFCAux.substring(0, 4);
                 String digitoRFC = RFCAux.substring(4, 10);
 
                 // clase pattern - matches para buscar coincidencias de A a Z
                 boolean esLetra = Pattern.matches("^[A-Z]*$", letraRFC);
-                if(esLetra = true){
+                if (esLetra = true) {
                     letraRFC = letraRFC;
                 } else {
                     throw new ExcepcionRFC("Error en RFC ");
                 }
-                if(EsNumero.esNumero(digitoRFC)){
+                if (EsNumero.esNumero(digitoRFC)) {
                     digitoRFC = digitoRFC;
                 } else {
                     throw new ExcepcionRFC("Error en RFC ");
                 }
                 // termina la verificacion
 
-                // transformar los string del RFC a int, concatenamos COL y la parte cadena del RFC
+                // transformar los string del RFC a int, concatenamos COL y la parte cadena del
+                // RFC
                 String parteLetra = clave + letraRFC;
 
                 // usamos ascii para obtener los valores
@@ -275,50 +276,97 @@ public class Referencia {
                     // variable que va a obtener las letras
                     char caracterAux = parteLetra.charAt(i);
                     // parseamos a ascii
-                    valoresLetras[i] = ((int) caracterAux -55);
+                    valoresLetras[i] = ((int) caracterAux - 55);
                 }
 
-                // extraemos las partes ya convertidas a numeros del RFC
-                String primerP = String.valueOf(valoresLetras[0]);
-                String segundaP = String.valueOf(valoresLetras[1]);
-                String terceraP = String.valueOf(valoresLetras[2]);
-                String cuartaP = String.valueOf(valoresLetras[3]);
-                String quintaP = String.valueOf(valoresLetras[4]);
-                String sextaP = String.valueOf(valoresLetras[5]);
-                String septimaP = String.valueOf(valoresLetras[6]);
+                // fecha condensada, digitoRFCAUX y monto condensado a
+                /*
+                 * VALORESLETRAS -- 7, digitoRFC -- 6, fechaCondensada -- 4, montoCondensado -- 1
+                 * Total 18
+                 */
 
-                // fecha condensada, digitoRFCAUX y monto condensado a string
-                String digitoRFCAux = digitoRFC.toString();
-                String fechaCondensadaAux = this.fechaCondenzada;
-                String montoCondensadoAux = String.valueOf(this.montoCondensado);
+                // pasamos las variables que componen a preDigito a String
+                String digitoRFCStr = String.valueOf(digitoRFC);
+                String fechaCondensadaStr = this.fechaCondenzada;
+                String montoCondensadoStr = String.valueOf(this.montoCondensado);
 
+                // creamos los arreglos int que tendran los caracteres separados y casteados a int de str
+                int[] digitoRfcFinal = new int[digitoRFCStr.length()];
+                int[] fechaCondensadaFinal = new int[fechaCondensadaStr.length()];
+                int[] montoCondensadoFinal = new int[montoCondensadoStr.length()];
 
-                System.out.println("--> " + fechaCondensadaAux + "> " + fechaCondensadaAux.length());
-                System.out.println("--> " + montoCondensadoAux + "> " + montoCondensadoAux.length());
+                // casteo digitoRfcFinal
+                for (int i = 0; i < digitoRfcFinal.length; i++) {
+                    digitoRfcFinal[i] = digitoRFCStr.charAt(i) - '0';
+                }
+                // casteo fechaCondensadaFinal 
+                for (int k = 0; k < fechaCondensadaFinal.length; k++) {
+                    fechaCondensadaFinal[k] = fechaCondensadaStr.charAt(k) - '0';
+                }
+                // casteo montoCondensadoFinal
+                for (int n = 0; n < montoCondensadoFinal.length; n++) {
+                    montoCondensadoFinal[n] = montoCondensadoStr.charAt(n) - '0';
+                }
 
+                // creamos el arrrayList y asignamos los valores separados 
+                ArrayList<Integer> listaDigitos = new ArrayList<>();
+                listaDigitos.add(0, valoresLetras[0]);
+                listaDigitos.add(1, valoresLetras[1]);
+                listaDigitos.add(2, valoresLetras[2]);
+                listaDigitos.add(3, valoresLetras[3]);
+                listaDigitos.add(4, valoresLetras[4]);
+                listaDigitos.add(5, valoresLetras[5]);
+                listaDigitos.add(6, valoresLetras[6]);
+                // COL y 4 Letras RFC to int (VALORLETRAS)
+                listaDigitos.add(7, digitoRfcFinal[0]);
+                listaDigitos.add(8, digitoRfcFinal[1]);
+                listaDigitos.add(9, digitoRfcFinal[2]);
+                listaDigitos.add(10, digitoRfcFinal[3]);
+                listaDigitos.add(11, digitoRfcFinal[4]);
+                listaDigitos.add(12, digitoRfcFinal[5]);
+                // digitosNumericos de RFC
+                listaDigitos.add(13, fechaCondensadaFinal[0]);
+                listaDigitos.add(14, fechaCondensadaFinal[1]);
+                listaDigitos.add(15, fechaCondensadaFinal[2]);
+                listaDigitos.add(16, fechaCondensadaFinal[3]);
+                // fechaCondensada
+                listaDigitos.add(17, montoCondensadoFinal[0]);
+                // montoCondensado
 
-                /*Falta ver como extraer los digitos de 
-                digitoRFC
-                fechaC
-                montoC
+                System.out.println("No elementos " + listaDigitos.size());
 
-                posiblemente con un arrayList para generar la secuencia
-                */
+                for (Integer z : listaDigitos) {
+                    System.out.println(z);
+                }
+                /*
+                System.out.println(digitoRFCStr.length());
+                System.out.println(fechaCondensadaStr.length());
+                System.out.println(montoCondensadoStr.length());
+                 int[] arregloMonto = new int[montoAux.length()];
+                for (int j = 0; j < arregloMonto.length; j++) {
+                    // casteo
+                    arregloMonto[j] = montoAux.charAt(j) - '0';
+                }*/
 
-
-
+                /*
+                 * String digitoRFCAux = digitoRFC.toString(); String fechaCondensadaAux =
+                 * this.fechaCondenzada; String montoCondensadoAux =
+                 * String.valueOf(this.montoCondensado); System.out.println("--> " +
+                 * fechaCondensadaAux + "> " + fechaCondensadaAux.length());
+                 * System.out.println("--> " + montoCondensadoAux + "> " +
+                 * montoCondensadoAux.length()); Falta ver como extraer los digitos de digitoRFC
+                 * fechaC montoC posiblemente con un arrayList para generar la secuencia
+                 */
 
                 estadoDigito = true;
-                
+
             } catch (ExcepcionRFC e) {
                 System.out.println(e.getMessage() + "Intente de nuevo usando el formato correcto!");
             }
-            
+
         } while (estadoDigito == false);
         return this.digitoVerificador;
     }
     // termina digito verificador
-
-
 
 }

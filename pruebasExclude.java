@@ -17,7 +17,9 @@ public class pruebasExclude {
 
         String z = m+n;
 
-        
+    
+
+        /*
         int[] p = new int[z.length()];
 
         for (int i = 0; i < z.length(); i++) {
@@ -37,7 +39,7 @@ public class pruebasExclude {
 
         String v = clave_RFC + "vvv";
 
-        System.out.println(v);
+        System.out.println(v);*/
 
 
     }
