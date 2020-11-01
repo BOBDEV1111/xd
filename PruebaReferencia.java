@@ -12,6 +12,9 @@ public class PruebaReferencia {
             System.out.println("Monto condensado: "+ prueba.getMontoCondensado());
             System.out.println(":::");
             prueba.digitoVerificador(sc);
+            System.out.println("Digito verificador: " + prueba.getDigitoVerificador());
+            System.out.println(":::");
+            System.out.println(prueba.toString());
             
         } catch (ExcepcionLongitud g) {
             System.out.println(g.getMessage());

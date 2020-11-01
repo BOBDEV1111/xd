@@ -12,6 +12,7 @@ public class Referencia {
     private String RFC;
 
     static final String clave = "COL";
+
     static int anioEntero;
     static int mesEntero;
     static int diaEntero;
@@ -68,13 +69,19 @@ public class Referencia {
 
                 // stringbuiler para contruir la fecha condensada
                 StringBuilder preCondensada = new StringBuilder();
-                int aniosFinal = anioEntero - 2014;
+                int aniosFinal = (anioEntero - 2014) * 372;
                 int mesesFinal = (mesEntero - 1) * 31;
                 int diasFinal = (diaEntero - 1);
 
+                /*
+                 * prueba fecha System.out.println("an " + anioEntero);
+                 * System.out.println("mes " + mesEntero); System.out.println("dia " +
+                 * diaEntero); System.out.println("suma: " + sumaCondensada);
+                 * 
+                 */
+
                 // suma de las tres operaciones
                 int sumaCondensada = (aniosFinal + mesesFinal + diasFinal);
-
                 // obtenemos la longitud de la sumaCondensada
                 String sumaCondensadaAux = Integer.toString(sumaCondensada);
 
@@ -134,8 +141,7 @@ public class Referencia {
         do {
             // pedir los numeros
             try {
-                System.out.println("Ingresa el monto total incluyendo los centavos con un punto para separarlos ");
-                System.out.println("Ejemplo: 543.12 ");
+                System.out.println("Ingresa el monto total incluyendo los centavos con un punto para separarlos, ejemplo 4321.39 ");
                 String montoPrincipal = sc.nextLine();
                 // retiro el punto
                 montoAux = montoPrincipal.replace(".", "");
@@ -241,6 +247,8 @@ public class Referencia {
                 System.out.println("Ingrese su RFC sin homoclave, ejemplo: NAMS640111 ");
                 RFCAux = sc.nextLine();
 
+                this.RFC = RFCAux;
+
                 // verificamos que sea la longitud correcta
                 if (RFCAux.length() > 10) {
                     throw new ExcepcionRFC("Exceso de caracteres ");
@@ -281,8 +289,8 @@ public class Referencia {
 
                 // fecha condensada, digitoRFCAUX y monto condensado a
                 /*
-                 * VALORESLETRAS -- 7, digitoRFC -- 6, fechaCondensada -- 4, montoCondensado -- 1
-                 * Total 18
+                 * VALORESLETRAS -- 7, digitoRFC -- 6, fechaCondensada -- 4, montoCondensado --
+                 * 1 Total 18
                  */
 
                 // pasamos las variables que componen a preDigito a String
@@ -290,7 +298,8 @@ public class Referencia {
                 String fechaCondensadaStr = this.fechaCondenzada;
                 String montoCondensadoStr = String.valueOf(this.montoCondensado);
 
-                // creamos los arreglos int que tendran los caracteres separados y casteados a int de str
+                // creamos los arreglos int que tendran los caracteres separados y casteados a
+                // int de str
                 int[] digitoRfcFinal = new int[digitoRFCStr.length()];
                 int[] fechaCondensadaFinal = new int[fechaCondensadaStr.length()];
                 int[] montoCondensadoFinal = new int[montoCondensadoStr.length()];
@@ -299,7 +308,7 @@ public class Referencia {
                 for (int i = 0; i < digitoRfcFinal.length; i++) {
                     digitoRfcFinal[i] = digitoRFCStr.charAt(i) - '0';
                 }
-                // casteo fechaCondensadaFinal 
+                // casteo fechaCondensadaFinal
                 for (int k = 0; k < fechaCondensadaFinal.length; k++) {
                     fechaCondensadaFinal[k] = fechaCondensadaStr.charAt(k) - '0';
                 }
@@ -308,7 +317,7 @@ public class Referencia {
                     montoCondensadoFinal[n] = montoCondensadoStr.charAt(n) - '0';
                 }
 
-                // creamos el arrrayList y asignamos los valores separados 
+                // creamos el arrrayList y asignamos los valores separados
                 ArrayList<Integer> listaDigitos = new ArrayList<>();
                 listaDigitos.add(0, valoresLetras[0]);
                 listaDigitos.add(1, valoresLetras[1]);
@@ -333,29 +342,71 @@ public class Referencia {
                 listaDigitos.add(17, montoCondensadoFinal[0]);
                 // montoCondensado
 
-                System.out.println("No elementos " + listaDigitos.size());
+                // creamos un arrayList para los potenciadores
+                ArrayList<Integer> ListaPotenciadores = new ArrayList<>();
+                // creamos los ListaPotenciadores y las variables de control
+                int potencia1 = 11;
+                int potencia2 = 13;
+                int potencia3 = 17;
+                int potencia4 = 19;
+                int potencia5 = 23;
 
-                for (Integer z : listaDigitos) {
-                    System.out.println(z);
+                // llenado de lista, como ya tengo un tamaño definido ya no es necesario crear
+                // una lista dinamica
+                ListaPotenciadores.add(0, potencia1);
+                ListaPotenciadores.add(1, potencia2);
+                ListaPotenciadores.add(2, potencia3);
+                ListaPotenciadores.add(3, potencia4);
+                ListaPotenciadores.add(4, potencia5);
+                ListaPotenciadores.add(5, potencia1);
+                ListaPotenciadores.add(6, potencia2);
+                ListaPotenciadores.add(7, potencia3);
+                ListaPotenciadores.add(8, potencia4);
+                ListaPotenciadores.add(9, potencia5);
+                ListaPotenciadores.add(10, potencia1);
+                ListaPotenciadores.add(11, potencia2);
+                ListaPotenciadores.add(12, potencia3);
+                ListaPotenciadores.add(13, potencia4);
+                ListaPotenciadores.add(14, potencia5);
+                ListaPotenciadores.add(15, potencia1);
+                ListaPotenciadores.add(16, potencia2);
+                ListaPotenciadores.add(17, potencia3);
+                // size 18
+
+                // lo invierto
+                Collections.reverse(ListaPotenciadores);
+
+                // variable para la suma de las multiplicaciones
+                int sumaMultiplicacionListas = 0;
+
+                for (int i = 0; i < listaDigitos.size(); i++) {
+                    sumaMultiplicacionListas = sumaMultiplicacionListas
+                            + (listaDigitos.get(i) * ListaPotenciadores.get(i));
                 }
-                /*
-                System.out.println(digitoRFCStr.length());
-                System.out.println(fechaCondensadaStr.length());
-                System.out.println(montoCondensadoStr.length());
-                 int[] arregloMonto = new int[montoAux.length()];
-                for (int j = 0; j < arregloMonto.length; j++) {
-                    // casteo
-                    arregloMonto[j] = montoAux.charAt(j) - '0';
-                }*/
+
+                // aplicamos el operador mod %
+                int residuoDV = sumaMultiplicacionListas % 97;
+                // sumamos 1
+                int preDigitoVerificador = residuoDV + 1;
+
+                // verificamos que sean dos digitos sino integramos uno a la izquierda
+                StringBuilder preDV = new StringBuilder();
+                String predigitoVerificadorStr = Integer.toString(preDigitoVerificador);
+                // lo asignamos
+                preDV.append(predigitoVerificadorStr);
+
+                if (predigitoVerificadorStr.length() <= 1) {
+                    preDV.insert(0, '0');
+                }
+
+                // lo asigno a digitoVerificador
+                this.digitoVerificador = Integer.parseInt(preDV.toString());
 
                 /*
-                 * String digitoRFCAux = digitoRFC.toString(); String fechaCondensadaAux =
-                 * this.fechaCondenzada; String montoCondensadoAux =
-                 * String.valueOf(this.montoCondensado); System.out.println("--> " +
-                 * fechaCondensadaAux + "> " + fechaCondensadaAux.length());
-                 * System.out.println("--> " + montoCondensadoAux + "> " +
-                 * montoCondensadoAux.length()); Falta ver como extraer los digitos de digitoRFC
-                 * fechaC montoC posiblemente con un arrayList para generar la secuencia
+                 * System.out.println("No elementos l1 " + listaDigitos.size());
+                 * System.out.println("No elementos l2 " + ListaPotenciadores.size()); for
+                 * (Integer z : listaDigitos) { System.out.println(z); } for (Integer v :
+                 * ListaPotenciadores) { System.out.println(v); }
                  */
 
                 estadoDigito = true;
@@ -365,8 +416,22 @@ public class Referencia {
             }
 
         } while (estadoDigito == false);
+
         return this.digitoVerificador;
     }
     // termina digito verificador
+
+    public int getDigitoVerificador() {
+        return this.digitoVerificador;
+    }
+
+    public String getRFC() {
+        return this.RFC;
+    }
+
+    // metodo toSting
+    public String toString() {
+        return "Referencia: " + clave + getRFC() + getFechaCondenzada() + getMontoCondensado() + getDigitoVerificador();
+    }
 
 }
